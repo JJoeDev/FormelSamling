@@ -3,30 +3,26 @@ project(FormelSamling) # Omdøb senere
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
 
+# Set minimum required OpenGL version
+set(OpenGL_GL_PREFERENCE "GLVND")
+
 # Include ImGui
 file(GLOB IMGUI_SRC
     "vendor/imgui/*.cpp"
     "vendor/imgui/*.h"
-    "vendor/imgui/backends/imgui_impl_sdl2.cpp"
-    "vendor/imgui/backends/imgui_impl_sdlrenderer2.cpp"
-    "vendor/imgui/backends/imgui_impl_sdl2.h"
-    "vendor/imgui/backends/imgui_impl_sdlrenderer2.h"
+    "vendor/imgui/backends/imgui_impl_opengl3.cpp"
+    "vendor/imgui/backends/imgui_impl_opengl3.h"
+    "vendor/imgui/backends/imgui_impl_glfw.cpp"
+    "vendor/imgui/backends/imgui_impl_glfw.h"
 )
 
-# Check if SDL2 is installed
-find_package(SDL2 QUIET)
-if(NOT SDL2_FOUND)
-    message(STATUS "SDL2 was not found. Downloading and building from source...")
-    include(FetchContent)
-    FetchContent_Declare(SDL2 URL https://github.com/libsdl-org/SDL/releases/tag/release-2.30.2)
-    
-    FetchContent_GetProperties(SDL2)
+# Find GLFW
+find_package(glfw3 REQUIRED)
 
-    if(NOT SDL2_POPULATED)
-        FetchContent_Populate(SDL2)
-        add_subdirectory(${sdl2_SOURCE_DIR} ${sdl2_BINARY_DIR})
-    endif()
-endif()
+# Find OpenGL
+find_package(OpenGL 3 REQUIRED)
+
+include_directories(${OPENGL_INCLUDE_DIR})
 
 file(GLOB_RECURSE SRC src/*.cpp)
 
@@ -35,4 +31,19 @@ add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
 target_include_directories(${PROJECT_NAME} PRIVATE vendor/imgui)
 target_include_directories(${PROJECT_NAME} PRIVATE vendor/imgui/backends)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${OPENGL_LIBRARIES})
+
+# Platform specific settings
+if(WIN32)
+    # Windows settings
+    target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
+elseif(UNIX AND NOT APPLE)
+    # Linux settings
+    target_link_libraries(${PROJECT_NAME} PRIVATE dl)
+elseif(APPLE)
+    # Apple settings
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework OpenGL")
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework Cocoa")
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework IOKit")
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreVideo")
+endif()
