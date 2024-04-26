@@ -1,2 +1,5 @@
 CMakeFiles
+bin
 CMakeCache.*
+*.cmake
+Makefile

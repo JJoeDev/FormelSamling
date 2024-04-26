@@ -1,8 +1,17 @@
 cmake_minimum_required(VERSION 3.20)
 project(FormelSamling) # Omdøb senere
 
-# Find ImGui from vendor
-add_subdirectory(vendor/imgui)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
+
+# Include ImGui
+file(GLOB IMGUI_SRC
+    "vendor/imgui/*.cpp"
+    "vendor/imgui/*.h"
+    "vendor/imgui/backends/imgui_impl_sdl2.cpp"
+    "vendor/imgui/backends/imgui_impl_sdlrenderer2.cpp"
+    "vendor/imgui/backends/imgui_impl_sdl2.h"
+    "vendor/imgui/backends/imgui_impl_sdlrenderer2.h"
+)
 
 # Check if SDL2 is installed
 find_package(SDL2 QUIET)
@@ -19,10 +28,11 @@ if(NOT SDL2_FOUND)
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
-
 file(GLOB_RECURSE SRC src/*.cpp)
 
-add_executable(${PROJECT_NAME} ${SRC})
+add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
+target_include_directories(${PROJECT_NAME} PRIVATE vendor/imgui)
+target_include_directories(${PROJECT_NAME} PRIVATE vendor/imgui/backends)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
