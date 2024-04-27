@@ -3,7 +3,6 @@
 #include "../vendor/imgui/imgui.h"
 #include "../vendor/imgui/backends/imgui_impl_glfw.h"
 #include "../vendor/imgui/backends/imgui_impl_opengl3.h"
-
 #define GL_SILENCE_DEPRECATION
 
 #if defined (IMGUI_IMPL_OPENGL_ES2)
@@ -40,7 +39,10 @@ int main(int, char**){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-    GLFWwindow* window = glfwCreateWindow(680, 480, "Formel Samling", nullptr, nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); //! Might remove later
+    glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
+
+    GLFWwindow* window = glfwCreateWindow(1024, 770, "Formel Samling", nullptr, nullptr);
     if(!window){
         std::cerr << "GLFW WINDOW CREATION FAILED\n";
         return -1;

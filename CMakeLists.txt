@@ -1,19 +1,23 @@
 cmake_minimum_required(VERSION 3.20)
 project(FormelSamling) # Omdøb senere
 
+# Exports executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
 
 # Set minimum required OpenGL version
 set(OpenGL_GL_PREFERENCE "GLVND")
 
+# Set the directory of the imgui files we use
+set(IMGUI_DIR "${CMAKE_BINARY_DIR}/vendor/imgui")
+
 # Include ImGui
 file(GLOB IMGUI_SRC
-    "vendor/imgui/*.cpp"
-    "vendor/imgui/*.h"
-    "vendor/imgui/backends/imgui_impl_opengl3.cpp"
-    "vendor/imgui/backends/imgui_impl_opengl3.h"
-    "vendor/imgui/backends/imgui_impl_glfw.cpp"
-    "vendor/imgui/backends/imgui_impl_glfw.h"
+    "${IMGUI_DIR}/*.cpp"
+    "${IMGUI_DIR}/*.h"
+    "${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
+    "${IMGUI_DIR}/backends/imgui_impl_opengl3.h"
+    "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
+    "${IMGUI_DIR}/backends/imgui_impl_glfw.h"
 )
 
 # Find GLFW
@@ -28,8 +32,7 @@ file(GLOB_RECURSE SRC src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
 
-target_include_directories(${PROJECT_NAME} PRIVATE vendor/imgui)
-target_include_directories(${PROJECT_NAME} PRIVATE vendor/imgui/backends)
+target_include_directories(${PROJECT_NAME} PRIVATE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${OPENGL_LIBRARIES})
 
