@@ -15,7 +15,7 @@ App::~App(){
 }
 
 void App::glfw_error_callback(int error, const char* msg){
-    std::cerr << "[ GLFW ERROR ] Code: " << error << " | " << msg << std::endl;
+    fprintf(stderr, "GLFW Error %d: %s\n", error, msg);
 }
 
 bool App::Init(int width, int height, const char* title){
@@ -50,28 +50,61 @@ bool App::Init(int width, int height, const char* title){
     glfwMakeContextCurrent(m_window);
     glfwSwapInterval(1); // Enable VSync
 
-    m_gui = new MasterGui(m_window, glsl_version);
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+    ImGui::StyleColorsDark();
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.WindowRounding = 0.5f;
+
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    m_guiFlags = (ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 
     return true;
 }
 
 void App::Run(){
-    int displayW, displayH;
-
     while(!glfwWindowShouldClose(m_window)){
         glfwPollEvents();
 
-        m_gui->Gui();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
-        glfwGetFramebufferSize(m_window, &displayW, &displayH);
-        glViewport(0, 0, displayW, displayH);
+        Gui();
+
+        ImGui::Render();
+        glfwGetFramebufferSize(m_window, &m_displayW, &m_displayH);
+        glViewport(0, 0, m_displayW, m_displayH);
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        m_gui->Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(m_window);
     }
+}
 
-    delete m_gui;
-    m_gui = nullptr;
+void App::Gui(){
+    // Begin the main window where all gui will be
+    ImGui::Begin("Base Window", nullptr, m_guiFlags);
+
+    ImGui::SetWindowPos(ImVec2{0, 0});
+    ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});
+
+    ImGui::TextColored(ImVec4{1.0f, 0.0f, 0.0f, 1.0f}, "Sample Color Text");
+    ImGui::Text("Sample Normal Text");
+
+    if(ImGui::CollapsingHeader("Test")){
+        ImGui::Text("Collapsed text");
+    }
+
+    ImGui::End();
+    // End the main window where all gui is inside of
 }
