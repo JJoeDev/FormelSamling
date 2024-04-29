@@ -4,6 +4,9 @@ project(FormelSamling) # Omdøb senere
 # Exports executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Set minimum required OpenGL version
 set(OpenGL_GL_PREFERENCE "GLVND")
 
