@@ -6,7 +6,7 @@ Just a silly little project
 | OS | State |
 | - | - |
 | Arch Linux | Working |
-| Mac | Not tested |
+| Mac | Working |
 | Windows | Not Tested |
 
 ## Installing
