@@ -7,7 +7,7 @@ Just a silly little project
 | - | - |
 | Arch Linux | Working |
 | Mac | Working |
-| Windows | Not Tested |
+| Windows | Working |
 
 ## Installing
 The only way to try this software is to clone the repo using --recursive
@@ -22,6 +22,20 @@ After cloning you should be ready to run the cmake script that hopefully works o
 $ cmake . && make
 $ ./bin/FormelSamling
 ```
+
+### For Windows
+
+Start by making sure cmake is installed and run ```cmake .```
+
+next make sure msbuild is installed in *Developer Command Prompt for VS 2022* (That is where I have tested it on)
+
+next run the following commands to build an executable
+
+```
+$ msbuild FormelSamling.sln /p:Configuration=Release /p:Platform=x64
+```
+
+Now you should have an executable in ```/bin/Release```
 
 
 ## Source Info
