@@ -4,9 +4,6 @@ project(FormelSamling) # Omdøb senere
 # Exports executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # Set minimum required OpenGL version
 set(OpenGL_GL_PREFERENCE "GLVND")
 
@@ -24,8 +21,14 @@ file(GLOB IMGUI_SRC
 )
 
 # Find GLFW
-find_package(glfw3 REQUIRED)
+if(WIN32)
+	include(FetchContent)
 
+	FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.4) 
+	FetchContent_MakeAvailable(glfw)
+else()
+	find_package(glfw3 REQUIRED)
+endif()
 # Find OpenGL
 find_package(OpenGL 3 REQUIRED)
 
