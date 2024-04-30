@@ -65,7 +65,11 @@ bool App::Init(int width, int height, const char* title){
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    m_guiFlags = (ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking);
+    m_guiFlags |= ImGuiWindowFlags_NoResize;
+    m_guiFlags |= ImGuiWindowFlags_NoMove;
+    m_guiFlags |= ImGuiWindowFlags_NoCollapse;
+    m_guiFlags |= ImGuiWindowFlags_NoDocking;
+    m_guiFlags |= ImGuiWindowFlags_MenuBar;
 
     return true;
 }
@@ -95,6 +99,28 @@ void App::Gui(){
     // Begin the main window where all gui will be
     ImGui::Begin("Base Window", nullptr, m_guiFlags);
 
+    if(ImGui::BeginMenuBar()){
+        if(ImGui::BeginMenu("Settings")){
+            ImGui::MenuItem("Demo Window", nullptr, &m_showDemo);
+
+            ImGui::SeparatorText("Application spicific");
+            if(ImGui::MenuItem("Resizable", nullptr, &m_resizable)){
+                glfwWindowHint(GLFW_RESIZABLE, m_resizable ? GLFW_TRUE : GLFW_FALSE);
+            }
+            
+            if(ImGui::MenuItem("Quit", nullptr)){
+                glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+            }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMenuBar();
+    }
+
+    if(m_showDemo)
+        ImGui::ShowDemoWindow();
+
     ImGui::SetWindowPos(ImVec2{0, 0});
     ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});
 
@@ -102,7 +128,7 @@ void App::Gui(){
     ImGui::Text("Sample Normal Text");
 
     if(ImGui::CollapsingHeader("Test")){
-        ImGui::Text("Collapsed text");
+        vecs.Render();
     }
 
     ImGui::End();
