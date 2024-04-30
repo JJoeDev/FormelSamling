@@ -1,6 +1,13 @@
 CMakeFiles
 bin
+_deps
+*.dir
+Release
+x64
 CMakeCache.*
 *.cmake
 Makefile
 *.ini
+*.vcxproj
+*.vcxproj.filters
+*.sln
