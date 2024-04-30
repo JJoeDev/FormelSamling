@@ -105,7 +105,7 @@ void App::Gui(){
 
             ImGui::SeparatorText("Application spicific");
             if(ImGui::MenuItem("Resizable", nullptr, &m_resizable)){
-                glfwWindowHint(GLFW_RESIZABLE, m_resizable ? GLFW_TRUE : GLFW_FALSE);
+                glfwSetWindowAttrib(m_window, GLFW_RESIZABLE, m_resizable ? GLFW_TRUE : GLFW_FALSE);
             }
             
             if(ImGui::MenuItem("Quit", nullptr)){
