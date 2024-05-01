@@ -129,6 +129,8 @@ void App::Gui(){
     ImGui::SetWindowPos(ImVec2{0, 0});
     ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});
 
+    ImGui::SetNextWindowSize(ImVec2{500, 500}, ImGuiCond_Once);
+
     ImGui::Checkbox("Vectors", &m_vectorsOpen);
     if(m_vectorsOpen)
         vecs.Draw();
