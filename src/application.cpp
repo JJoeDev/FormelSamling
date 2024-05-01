@@ -18,7 +18,7 @@ void App::glfw_error_callback(int error, const char* msg){
     fprintf(stderr, "GLFW Error %d: %s\n", error, msg);
 }
 
-bool App::Init(int width, int height, const char* title){
+bool App::Init(const char* title){
     // glfwSetErrorCallback(glfw_error_callback);
     if(!glfwInit()){
         std::cerr << "GLFW INIT ERROR!\n";
@@ -40,6 +40,11 @@ bool App::Init(int width, int height, const char* title){
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Might remove later
     glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
+
+    GLFWmonitor* mon = glfwGetPrimaryMonitor();
+    const GLFWvidmode* vMode = glfwGetVideoMode(mon);
+    int width = vMode->width;
+    int height = vMode->height;    
 
     m_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
     if(!m_window){
@@ -124,12 +129,9 @@ void App::Gui(){
     ImGui::SetWindowPos(ImVec2{0, 0});
     ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});
 
-    ImGui::TextColored(ImVec4{1.0f, 0.0f, 0.0f, 1.0f}, "Sample Color Text");
-    ImGui::Text("Sample Normal Text");
-
-    if(ImGui::CollapsingHeader("Test")){
-        vecs.Render();
-    }
+    ImGui::Checkbox("Vectors", &m_vectorsOpen);
+    if(m_vectorsOpen)
+        vecs.Draw();
 
     ImGui::End();
     // End the main window where all gui is inside of

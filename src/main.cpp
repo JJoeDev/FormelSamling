@@ -3,7 +3,7 @@
 int main(void){
     App& app = App::GetInstance();
 
-    if(!app.Init(1024, 770, "FOSS Formel samling")){
+    if(!app.Init("FOSS Formel samling")){
         return -1;
     }
 

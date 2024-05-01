@@ -18,7 +18,7 @@ public:
         return instance;
     }
 
-    bool Init(int width, int height, const char* title);
+    bool Init(const char* title);
 
     void Run();
 
@@ -41,6 +41,7 @@ private:
     ImGuiWindowFlags m_guiFlags;
 
     // Math visualizers
+    bool m_vectorsOpen;
     visual::Vectors vecs;
 };
 

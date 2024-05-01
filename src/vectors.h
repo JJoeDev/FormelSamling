@@ -1,19 +1,14 @@
 #ifndef VECTORS_H
 #define VECTORS_H
 
-#include "../vendor/imgui/imgui.h"
+#include "visualizer.h"
 
 namespace visual{
-    class Vectors{
+    class Vectors : public Visualizer{
     public:
-        Vectors() = default;
-
-        void Render();
-
+        void Draw() override;
+    
     private:
-        ImDrawList* m_drawList = nullptr;
-
-        float m_x, m_y;
     };
 }
 
