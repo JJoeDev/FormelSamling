@@ -8,6 +8,7 @@ namespace visual{
         if(ImGui::CollapsingHeader("Vector Basics")){
             static float v_x, v_y;
 
+            ImGui::Text("Vector a = (%.3f, %.3f)", v_x, v_y);
             ImGui::SliderFloat("Vector X", &v_x, 0, 30);
             ImGui::SliderFloat("Vector Y", &v_y, 0, 30);
 

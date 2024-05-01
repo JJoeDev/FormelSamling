@@ -8,18 +8,18 @@ inline void ApplyStyles(){
 	
 	style.Alpha = 1.0f;
 	style.DisabledAlpha = 1.0f;
-	style.WindowPadding = ImVec2(12.0f, 12.0f);
-	style.WindowRounding = 11.5f;
+	style.WindowPadding = ImVec2(3.0f, 3.0f);
+	style.WindowRounding = 4.0f;
 	style.WindowBorderSize = 1.0f;
 	style.WindowMinSize = ImVec2(20.0f, 20.0f);
 	style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-	style.WindowMenuButtonPosition = ImGuiDir_Right;
+	//style.WindowMenuButtonPosition = ImGuiDir_Right;
 	style.ChildRounding = 0.0f;
 	style.ChildBorderSize = 1.0f;
 	style.PopupRounding = 0.0f;
 	style.PopupBorderSize = 1.0f;
-	style.FramePadding = ImVec2(20.0f, 3.400000095367432f);
-	style.FrameRounding = 11.89999961853027f;
+	style.FramePadding = ImVec2(3.0f, 3.0);
+	style.FrameRounding = 4.0f;
 	style.FrameBorderSize = 0.0f;
 	style.ItemSpacing = ImVec2(4.300000190734863f, 5.5f);
 	style.ItemInnerSpacing = ImVec2(7.099999904632568f, 1.799999952316284f);
@@ -27,9 +27,9 @@ inline void ApplyStyles(){
 	style.IndentSpacing = 0.0f;
 	style.ColumnsMinSpacing = 4.900000095367432f;
 	style.ScrollbarSize = 11.60000038146973f;
-	style.ScrollbarRounding = 15.89999961853027f;
+	style.ScrollbarRounding = 12.0f;
 	style.GrabMinSize = 3.700000047683716f;
-	style.GrabRounding = 20.0f;
+	style.GrabRounding = 5.0f;
 	style.TabRounding = 0.0f;
 	style.TabBorderSize = 0.0f;
 	style.TabMinWidthForCloseButton = 0.0f;
