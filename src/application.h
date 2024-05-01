@@ -8,6 +8,8 @@
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
 
+#include "vectors.h"
+
 // App is a singleton. There can only be one
 class App{
 public:
@@ -16,7 +18,7 @@ public:
         return instance;
     }
 
-    bool Init(int width, int height, const char* title);
+    bool Init(const char* title);
 
     void Run();
 
@@ -32,9 +34,15 @@ private:
     void Gui();
 
     GLFWwindow* m_window;
+    bool m_resizable = false;
 
+    bool m_showDemo = false;
     int m_displayW, m_displayH;
     ImGuiWindowFlags m_guiFlags;
+
+    // Math visualizers
+    bool m_vectorsOpen;
+    visual::Vectors vecs;
 };
 
 #endif
