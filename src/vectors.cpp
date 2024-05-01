@@ -4,6 +4,7 @@ namespace visual{
     void Vectors::Draw() {
         ImGui::Begin("Hello Vectors");
 
+
         if(ImGui::CollapsingHeader("Vector Basics")){
             static float v_x, v_y;
 

@@ -1,4 +1,5 @@
 #include "application.h"
+#include "styling.h"
 
 #include <iostream>
 
@@ -64,8 +65,7 @@ bool App::Init(const char* title){
 
     ImGui::StyleColorsDark();
 
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowRounding = 0.5f;
+    ApplyStyles();
 
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
@@ -129,7 +129,7 @@ void App::Gui(){
     ImGui::SetWindowPos(ImVec2{0, 0});
     ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});
 
-    ImGui::SetNextWindowSize(ImVec2{500, 500}, ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2{500, 500}, ImGuiCond_FirstUseEver);
 
     ImGui::Checkbox("Vectors", &m_vectorsOpen);
     if(m_vectorsOpen)
