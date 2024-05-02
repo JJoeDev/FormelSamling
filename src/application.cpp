@@ -2,6 +2,7 @@
 #include "styling.h"
 
 #include <iostream>
+#include <filesystem>
 
 App::App(){
     glfwSetErrorCallback(glfw_error_callback);
@@ -58,10 +59,10 @@ bool App::Init(const char* title){
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io = &ImGui::GetIO(); (void)io;
+    io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     ImGui::StyleColorsDark();
 
@@ -75,6 +76,20 @@ bool App::Init(const char* title){
     m_guiFlags |= ImGuiWindowFlags_NoCollapse;
     m_guiFlags |= ImGuiWindowFlags_NoDocking;
     m_guiFlags |= ImGuiWindowFlags_MenuBar;
+
+    if(std::filesystem::exists("fonts/NotoSansMath-Regular.ttf") && std::filesystem::is_regular_file("fonts/NotoSansMath-Regular.ttf")){
+        ImVector<ImWchar> ranges;
+        ImFontGlyphRangesBuilder builder;
+        builder.AddRanges(io->Fonts->GetGlyphRangesDefault());
+        builder.AddText(u8"∀αβγδεζηθικλμνξοπρστυφχψωΓΔΘΛΞΟΠΣΦΨΩ∑∏∫√±×÷=≠<>≈≡∝∞∉∈∪∩⊆⊂∧∨¬⇒⇔⊢∠°′″+-×÷^∛≈≅≡=≠<>≤≥|!%∴∵∎πei²");
+
+        builder.BuildRanges(&ranges);
+        io->Fonts->AddFontFromFileTTF("fonts/NotoSansMath-Regular.ttf", 20.0f, NULL, ranges.Data);
+        io->Fonts->Build();
+    }
+    else {
+        std::cout << "Not found NotoSansMath-Regular.ttf\n";
+    }
 
     return true;
 }
@@ -103,6 +118,10 @@ void App::Run(){
 void App::Gui(){
     // Begin the main window where all gui will be
     ImGui::Begin("Base Window", nullptr, m_guiFlags);
+
+    ImGui::Text(u8"Current font: %s", io->Fonts[0].ConfigData.Data->Name);
+    ImGui::Text(u8"∀ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω Γ Δ Θ Λ Ξ Ο Π Σ Φ Ψ Ω ∑ ∏ ∫ √ ± × ÷ = ≠ < > ≈ ≡ ∝ ∞ ∉ ∈ ∪ ∩ ⊆ ⊂ ∧ ∨ ¬ ⇒ ⇔ ⊢ ∠ ° ′ ″ + - × ÷ ^ ∛ ≈ ≅ ≡ = ≠ < > ≤ ≥ | ! % ∴ ∵ ∎ π e i");
+    ImGui::Text(u8"√(ax^2 + ay^2) ² ₂");
 
     if(ImGui::BeginMenuBar()){
         if(ImGui::BeginMenu("Settings")){
