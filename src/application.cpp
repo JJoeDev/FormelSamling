@@ -76,6 +76,7 @@ bool App::Init(const char* title){
     m_guiFlags |= ImGuiWindowFlags_NoCollapse;
     m_guiFlags |= ImGuiWindowFlags_NoDocking;
     m_guiFlags |= ImGuiWindowFlags_MenuBar;
+    //m_guiFlags |= ImGuiWindowFlags_Popup;
 
     if(std::filesystem::exists("fonts/NotoSansMath-Regular.ttf") && std::filesystem::is_regular_file("fonts/NotoSansMath-Regular.ttf")){
         ImVector<ImWchar> ranges;
@@ -127,11 +128,13 @@ void App::Gui(){
             ImGui::MenuItem("Demo Window", nullptr, &m_showDemo);
 
             ImGui::SeparatorText("Application spicific");
+            ImGui::MenuItem("Help", nullptr, &m_helpWindow);
+
             if(ImGui::MenuItem("Resizable", nullptr, &m_resizable)){
                 glfwSetWindowAttrib(m_window, GLFW_RESIZABLE, m_resizable ? GLFW_TRUE : GLFW_FALSE);
             }
             
-            if(ImGui::MenuItem("Quit", nullptr)){
+            if(ImGui::MenuItem("Quit")){
                 glfwSetWindowShouldClose(m_window, GLFW_TRUE);
             }
 
@@ -143,6 +146,24 @@ void App::Gui(){
 
     if(m_showDemo)
         ImGui::ShowDemoWindow();
+
+    if(m_helpWindow){
+        ImGui::OpenPopup("Help");
+
+        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
+
+        if(ImGui::BeginPopupModal("Help", nullptr, ImGuiWindowFlags_AlwaysAutoResize)){
+            ImGui::Text("A help page to help you use the Foss Interactive Formelsamling");
+
+            if(ImGui::Button("Close", ImVec2(120, 0))) {
+                m_helpWindow = false;
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
 
     ImGui::SetWindowPos(ImVec2{0, 0});
     ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});

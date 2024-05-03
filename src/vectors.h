@@ -9,6 +9,10 @@ namespace visual{
         void Draw() override;
     
     private:
+        ImVec2 m_canvasSize;
+        ImVec2 m_canvasPos;
+
+        void DrawCanvas();
     };
 }
 
