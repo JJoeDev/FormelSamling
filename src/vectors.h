@@ -12,6 +12,7 @@ namespace visual{
         ImVec2 m_canvasSize;
         ImVec2 m_canvasPos;
 
+        void DrawVector(const ImVec2& v_a, const ImVec2& v_b, const ImColor& color);
         void DrawCanvas();
     };
 }

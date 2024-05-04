@@ -82,9 +82,9 @@ bool App::Init(const char* title){
         ImVector<ImWchar> ranges;
         ImFontGlyphRangesBuilder builder;
         builder.AddRanges(io->Fonts->GetGlyphRangesDefault());
-        builder.AddText(u8"∀αβγδεζηθικλμνξοπρστυφχψωΓΔΘΛΞΟΠΣΦΨΩ∑∏∫√±×÷=≠<>≈≡∝∞∉∈∪∩⊆⊂∧∨¬⇒⇔⊢∠°′″+-×÷^∛≈≅≡=≠<>≤≥|!%∴∵∎πei");
+        builder.AddText(u8"∀αβγδεζηθικλμνξοπρστυφχψωΓΔΘΛΞΟΠΣΦΨΩ∑∏∫√±×÷=≠<>≈≡∝∞∉∈∪∩⊆⊂∧∨¬⇒⇔⊢∠°′″+-×÷^∛≈≅≡=≠<>≤≥|!%∴∵∎πei→←↑↓↔↕⇆⇈⇊⇒⇔");
         builder.BuildRanges(&ranges);
-        io->Fonts->AddFontFromFileTTF("fonts/NotoSansMath-Regular.ttf", 20.0f, NULL, ranges.Data);
+        io->Fonts->AddFontFromFileTTF("fonts/NotoSansMath-Regular.ttf", 21.0f, NULL, ranges.Data);
         io->Fonts->Build();
     }
     else {
@@ -121,6 +121,8 @@ void App::Gui(){
 
     ImGui::Text("Current font: %s", io->Fonts[0].ConfigData.Data->Name);
     ImGui::Text("∀ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω Γ Δ Θ Λ Ξ Ο Π Σ Φ Ψ Ω ∑ ∏ ∫ √ ± × ÷ = ≠ < > ≈ ≡ ∝ ∞ ∉ ∈ ∪ ∩ ⊆ ⊂ ∧ ∨ ¬ ⇒ ⇔ ⊢ ∠ ° ′ ″ + - × ÷ ^ ∛ ≈ ≅ ≡ = ≠ < > ≤ ≥ | ! % ∴ ∵ ∎ π e i");
+    ImGui::SameLine();
+    ImGui::Text(" → ← ↑ ↓ ↔ ↕ ⇆ ⇈ ⇊ ⇒ ⇔");
     ImGui::Text("√(ax^2 + ay^2)");
 
     if(ImGui::BeginMenuBar()){
