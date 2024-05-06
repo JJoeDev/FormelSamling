@@ -24,81 +24,54 @@ namespace visual{
         ImGui::Separator();
         ImGui::Spacing();
 
+        static float vec[2];
+        static float vec2[2];
+
         switch (vecMathIdx){
         case 0:{
-            const float sliderLimit = 20.0f;
-            static float v_x, v_y, v_len;
+            static float vLen;
 
-            ImGui::Text("Vector a = (%.3f, %.3f)", v_x, v_y);
-            ImGui::Text("|a| = √(ax^2 + ay^2) = %.3f", v_len);
+            ImGui::Text("Vector a = (%.3f, %.3f)", vec[0], vec[1]);
+            ImGui::Text("|a| = √(ax^2 + ay^2) = %.3f", vLen);
 
             ImGui::Spacing();
             ImGui::SeparatorText("Interactives");
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.48f);
-            ImGui::SliderFloat("ax", &v_x, -sliderLimit, sliderLimit); ImGui::SameLine();
-            ImGui::SliderFloat("ay", &v_y, -sliderLimit, sliderLimit);
-            ImGui::PopItemWidth();
+            ImGui::SliderFloat2("X, Y", vec, -m_sliderLimit, m_sliderLimit);
 
-            v_len = std::sqrt(v_x * v_x + v_y * v_y);
+            vLen = std::sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
             
             DrawCanvas();
-
-            //! Grid code is commented below
-            // ImVec2 gridSpacing = ImVec2{50.0f, 50.0f};
-            // for(float x = fmodf(m_canvasPos.x, gridSpacing.x); x < m_canvasSize.x; x += gridSpacing.x){
-            //     m_drawList->AddLine(ImVec2{m_canvasPos.x + x, m_canvasPos.y}, ImVec2{m_canvasPos.x + x, m_canvasPos.y + m_canvasSize.y}, IM_COL32(50, 50, 50, 255));
-            // }
-
-            // for(float y = fmodf(m_canvasPos.y, gridSpacing.y); y < m_canvasSize.y; y += gridSpacing.y){
-            //     m_drawList->AddLine(ImVec2{m_canvasPos.x, m_canvasPos.y + y}, ImVec2{m_canvasPos.x + m_canvasSize.x, m_canvasPos.y + y}, IM_COL32(50, 50, 50, 255));
-            // }
-
-            ImVec2 Center = ImVec2(m_canvasPos.x + m_canvasSize.x / 2, m_canvasPos.y + m_canvasSize.y / 2);            
-            ImVec2 vecEnd = ImVec2{Center.x + v_x * 10, Center.y + v_y * 10};
-            DrawVector(Center, vecEnd, ImColor(255, 255, 255));
+          
+            ImVec2 vecEnd = ImVec2{m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10};
+            DrawVector(m_canvasCenter, vecEnd, ImColor(255, 255, 255));
             break;
         }
         case 1:{
-            const float sliderLimit = 20.0f;
-            static float v_x, v_y, v_x2, v_y2;
-            static bool add = true;
-
             ImGui::SeparatorText("Example");
             ImGui::Text("Vector a = (3, 7)");
             ImGui::Text("Vector b = (6, 2)");
-            ImGui::Text("Vector c = a + b == (ax + bx over ay + by)");
-            ImGui::Text("Vector c = (3 + 6 over 7 + 2) = (9, 9)");
+            ImGui::Text("Vector c = (3 + 6, 7 + 2) = (9, 9)");
 
             ImGui::SeparatorText("Practical example");
 
-            ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a = (%.3f, %.3f)", v_x, v_y);
-            ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b = (%.3f, %.3f)", v_x2, v_y2);
-            ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c = (%.3f, %.3f)", v_x + v_x2, v_y + v_y2);
-
-            ImGui::Checkbox("Vector addition", &add);
+            ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a = (%.3f, %.3f)", vec[0], vec[1]);
+            ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b = (%.3f, %.3f)", vec2[0], vec2[1]);
+            ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c = (%.3f, %.3f)", vec[0] + vec2[0], vec[1] + vec2[1]);
 
             ImGui::Spacing();
             ImGui::SeparatorText("Interactives");
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.48f);
-            ImGui::SliderFloat("ax", &v_x, -sliderLimit, sliderLimit); ImGui::SameLine();
-            ImGui::SliderFloat("ay", &v_y, -sliderLimit, sliderLimit);
-            ImGui::PopItemWidth();
 
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.48f);
-            ImGui::SliderFloat("ax2", &v_x2, -sliderLimit, sliderLimit); ImGui::SameLine();
-            ImGui::SliderFloat("ay2", &v_y2, -sliderLimit, sliderLimit);
-            ImGui::PopItemWidth();
+            ImGui::SliderFloat2("a(X, Y)", vec, -m_sliderLimit, m_sliderLimit);
+            ImGui::SliderFloat2("b(X, Y)", vec2, -m_sliderLimit, m_sliderLimit);
 
             DrawCanvas();
 
-            ImVec2 Center = ImVec2(m_canvasPos.x + m_canvasSize.x / 2, m_canvasPos.y + m_canvasSize.y / 2);
+            ImVec2 v1End = ImVec2(m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10);
+            ImVec2 v2End = ImVec2(v1End.x + vec2[0] * 10, v1End.y + vec2[1] * -10);
 
-            ImVec2 v1End = ImVec2(Center.x + v_x * 10, Center.y + v_y * 10);
-            ImVec2 v2End = ImVec2(v1End.x + v_x2 * 10, v1End.y + v_y2 * 10);
-
-            DrawVector(Center, v1End, ImColor{0, 255, 0});
+            DrawVector(m_canvasCenter, v1End, ImColor{0, 255, 0});
             DrawVector(v1End, v2End, ImColor(0, 0, 255));
-            DrawVector(Center, v2End, ImColor(255, 0, 0));
+            DrawVector(m_canvasCenter, v2End, ImColor(255, 0, 0));
         }
         }
 
@@ -123,7 +96,7 @@ namespace visual{
             dir.x /= len;
             dir.y /= len;
 
-            // Basically just rotates the vector på 90 degrees so we can get a flat head on the main line
+            // The orthographic vector. Basically a vector rotated 90 degrees from our current vector
             ImVec2 ortho(-dir.y, dir.x);
             
             ImVec2 p1;
@@ -143,10 +116,16 @@ namespace visual{
     void Vectors::DrawCanvas(){
         m_canvasPos = ImGui::GetCursorScreenPos();
         m_canvasSize = ImGui::GetContentRegionAvail();
+        m_canvasCenter = ImVec2(m_canvasPos.x + m_canvasSize.x / 2, m_canvasPos.y + m_canvasSize.y / 2);
+
+        const ImColor canvasGray = ImColor(45, 45, 45);
 
         ImGui::InvisibleButton("canvas", m_canvasSize);
 
         m_drawList = ImGui::GetWindowDrawList();
-        m_drawList->AddRectFilled(m_canvasPos, ImVec2(m_canvasPos.x + m_canvasSize.x, m_canvasPos.y + m_canvasSize.y), IM_COL32(25, 25, 25, 255));
+        m_drawList->AddRectFilled(m_canvasPos, ImVec2(m_canvasPos.x + m_canvasSize.x, m_canvasPos.y + m_canvasSize.y), ImColor(25, 25, 25, 255));
+
+        m_drawList->AddLine(ImVec2{m_canvasPos.x, m_canvasCenter.y}, ImVec2{m_canvasPos.x + m_canvasSize.x, m_canvasCenter.y}, canvasGray);
+        m_drawList->AddLine(ImVec2{m_canvasCenter.x, m_canvasPos.y}, ImVec2{m_canvasCenter.x, m_canvasPos.y + m_canvasSize.y}, canvasGray);
     }
 }
