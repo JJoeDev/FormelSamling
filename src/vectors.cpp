@@ -48,15 +48,29 @@ namespace visual{
         }
         case 1:{
             ImGui::SeparatorText("Example");
-            ImGui::Text("Vector a = (3, 7)");
-            ImGui::Text("Vector b = (6, 2)");
-            ImGui::Text("Vector c = (3 + 6, 7 + 2) = (9, 9)");
+
+            static bool vAdd = true;
+            ImGui::Checkbox("Addition", &vAdd);
+
+            ImGui::Text("Vector + Vector formel: "); ImGui::SameLine();
+            if(vAdd)
+                HelpMark("a(5, 2) + b(1,7) = c(5 + 1, 2 + 7) = c(6, 9)");
+            else
+                HelpMark("a(5, 2) - b(1,7) = c(5 - 1, 2 - 7) = c(4, 5)");
 
             ImGui::SeparatorText("Practical example");
 
-            ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a = (%.3f, %.3f)", vec[0], vec[1]);
-            ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b = (%.3f, %.3f)", vec2[0], vec2[1]);
-            ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c = (%.3f, %.3f)", vec[0] + vec2[0], vec[1] + vec2[1]);
+            if(vAdd){
+                ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a(%.3f, %.3f) +", vec[0], vec[1]); ImGui::SameLine();
+                ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b(%.3f, %.3f) =", vec2[0], vec2[1]); ImGui::SameLine();
+                ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c(%.3f, %.3f)", vec[0] + vec2[0], vec[1] + vec2[1]);
+            }
+            else{
+                ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a(%.3f, %.3f) -", vec[0], vec[1]); ImGui::SameLine();
+                ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b(%.3f, %.3f) =", vec2[0], vec2[1]); ImGui::SameLine();
+                ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c(%.3f, %.3f)", vec[0] - vec2[0], vec[1] - vec2[1]);
+            }
+
 
             ImGui::Spacing();
             ImGui::SeparatorText("Interactives");
@@ -67,11 +81,19 @@ namespace visual{
             DrawCanvas();
 
             ImVec2 v1End = ImVec2(m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10);
-            ImVec2 v2End = ImVec2(v1End.x + vec2[0] * 10, v1End.y + vec2[1] * -10);
 
-            DrawVector(m_canvasCenter, v1End, ImColor{0, 255, 0});
-            DrawVector(v1End, v2End, ImColor(0, 0, 255));
-            DrawVector(m_canvasCenter, v2End, ImColor(255, 0, 0));
+            if(vAdd){
+                ImVec2 v2End = ImVec2(v1End.x + vec2[0] * 10, v1End.y + vec2[1] * -10); 
+                DrawVector(m_canvasCenter, v1End, ImColor{0, 255, 0});
+                DrawVector(v1End, v2End, ImColor(0, 0, 255));
+                DrawVector(m_canvasCenter, v2End, ImColor(255, 0, 0));
+            }
+            else{
+                ImVec2 v2End = ImVec2(m_canvasCenter.x + vec2[0] * 10, m_canvasCenter.y + vec2[1] * -10);
+                DrawVector(m_canvasCenter, v1End, ImColor(0, 255, 0));
+                DrawVector(m_canvasCenter, v2End, ImColor(0, 0, 255));
+                DrawVector(v1End, v2End, ImColor(255, 0, 0));
+            }
         }
         }
 
@@ -127,5 +149,14 @@ namespace visual{
 
         m_drawList->AddLine(ImVec2{m_canvasPos.x, m_canvasCenter.y}, ImVec2{m_canvasPos.x + m_canvasSize.x, m_canvasCenter.y}, canvasGray);
         m_drawList->AddLine(ImVec2{m_canvasCenter.x, m_canvasPos.y}, ImVec2{m_canvasCenter.x, m_canvasPos.y + m_canvasSize.y}, canvasGray);
+    }
+
+    void Vectors::HelpMark(const char* msg){
+        //ImGui::TextDisabled("(?)");
+        ImGui::TextColored(ImColor(255, 229, 0), "(?)");
+        if(ImGui::BeginItemTooltip()){
+            ImGui::TextUnformatted(msg);
+            ImGui::EndTooltip();
+        }
     }
 }
