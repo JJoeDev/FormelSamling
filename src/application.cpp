@@ -2,6 +2,7 @@
 #include "styling.h"
 
 #include <iostream>
+#include <filesystem>
 
 App::App(){
     glfwSetErrorCallback(glfw_error_callback);
@@ -58,10 +59,10 @@ bool App::Init(const char* title){
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io = &ImGui::GetIO(); (void)io;
+    io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     ImGui::StyleColorsDark();
 
@@ -75,6 +76,20 @@ bool App::Init(const char* title){
     m_guiFlags |= ImGuiWindowFlags_NoCollapse;
     m_guiFlags |= ImGuiWindowFlags_NoDocking;
     m_guiFlags |= ImGuiWindowFlags_MenuBar;
+    //m_guiFlags |= ImGuiWindowFlags_Popup;
+
+    if(std::filesystem::exists("fonts/NotoSansMath-Regular.ttf") && std::filesystem::is_regular_file("fonts/NotoSansMath-Regular.ttf")){
+        ImVector<ImWchar> ranges;
+        ImFontGlyphRangesBuilder builder;
+        builder.AddRanges(io->Fonts->GetGlyphRangesDefault());
+        builder.AddText(u8"∀αβγδεζηθικλμνξοπρστυφχψωΓΔΘΛΞΟΠΣΦΨΩ∑∏∫√±×÷=≠<>≈≡∝∞∉∈∪∩⊆⊂∧∨¬⇒⇔⊢∠°′″+-×÷^∛≈≅≡=≠<>≤≥|!%∴∵∎πei→←↑↓↔↕⇆⇈⇊⇒⇔");
+        builder.BuildRanges(&ranges);
+        io->Fonts->AddFontFromFileTTF("fonts/NotoSansMath-Regular.ttf", 21.0f, NULL, ranges.Data);
+        io->Fonts->Build();
+    }
+    else {
+        std::cout << "Not found NotoSansMath-Regular.ttf\n";
+    }
 
     return true;
 }
@@ -104,16 +119,24 @@ void App::Gui(){
     // Begin the main window where all gui will be
     ImGui::Begin("Base Window", nullptr, m_guiFlags);
 
+    ImGui::Text("Current font: %s", io->Fonts[0].ConfigData.Data->Name);
+    ImGui::Text("∀ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω Γ Δ Θ Λ Ξ Ο Π Σ Φ Ψ Ω ∑ ∏ ∫ √ ± × ÷ = ≠ < > ≈ ≡ ∝ ∞ ∉ ∈ ∪ ∩ ⊆ ⊂ ∧ ∨ ¬ ⇒ ⇔ ⊢ ∠ ° ′ ″ + - × ÷ ^ ∛ ≈ ≅ ≡ = ≠ < > ≤ ≥ | ! % ∴ ∵ ∎ π e i");
+    ImGui::SameLine();
+    ImGui::Text(" → ← ↑ ↓ ↔ ↕ ⇆ ⇈ ⇊ ⇒ ⇔");
+    ImGui::Text("√(ax^2 + ay^2)");
+
     if(ImGui::BeginMenuBar()){
         if(ImGui::BeginMenu("Settings")){
             ImGui::MenuItem("Demo Window", nullptr, &m_showDemo);
 
             ImGui::SeparatorText("Application spicific");
+            ImGui::MenuItem("Help", nullptr, &m_helpWindow);
+
             if(ImGui::MenuItem("Resizable", nullptr, &m_resizable)){
                 glfwSetWindowAttrib(m_window, GLFW_RESIZABLE, m_resizable ? GLFW_TRUE : GLFW_FALSE);
             }
             
-            if(ImGui::MenuItem("Quit", nullptr)){
+            if(ImGui::MenuItem("Quit")){
                 glfwSetWindowShouldClose(m_window, GLFW_TRUE);
             }
 
@@ -125,6 +148,24 @@ void App::Gui(){
 
     if(m_showDemo)
         ImGui::ShowDemoWindow();
+
+    if(m_helpWindow){
+        ImGui::OpenPopup("Help");
+
+        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
+
+        if(ImGui::BeginPopupModal("Help", nullptr, ImGuiWindowFlags_AlwaysAutoResize)){
+            ImGui::Text("A help page to help you use the Foss Interactive Formelsamling");
+
+            if(ImGui::Button("Close", ImVec2(120, 0))) {
+                m_helpWindow = false;
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
 
     ImGui::SetWindowPos(ImVec2{0, 0});
     ImGui::SetWindowSize(ImVec2{static_cast<float>(m_displayW), static_cast<float>(m_displayH)});

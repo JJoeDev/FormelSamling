@@ -34,11 +34,14 @@ private:
     void Gui();
 
     GLFWwindow* m_window;
+    int m_displayW, m_displayH;
     bool m_resizable = false;
 
-    bool m_showDemo = false;
-    int m_displayW, m_displayH;
+    ImGuiIO* io;
+
     ImGuiWindowFlags m_guiFlags;
+    bool m_showDemo = false;
+    bool m_helpWindow = false;
 
     // Math visualizers
     bool m_vectorsOpen;
