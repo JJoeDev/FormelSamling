@@ -15,7 +15,14 @@ namespace visual{
 
         const float m_sliderLimit = 20.0f;
 
+        float vec[2];
+        float vec2[2];
+
+
         static void HelpMark(const char* msg);
+
+        void BasicVector();
+        void BasicVecMath();
 
         void DrawVector(const ImVec2& v_a, const ImVec2& v_b, const ImColor& color);
         void DrawCanvas();

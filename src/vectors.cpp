@@ -24,83 +24,89 @@ namespace visual{
         ImGui::Separator();
         ImGui::Spacing();
 
-        static float vec[2];
-        static float vec2[2];
-
         switch (vecMathIdx){
-        case 0:{
-            static float vLen;
-
-            ImGui::Text("Vector a = (%.3f, %.3f)", vec[0], vec[1]);
-            ImGui::Text("|a| = √(ax^2 + ay^2) = %.3f", vLen);
-
-            ImGui::Spacing();
-            ImGui::SeparatorText("Interactives");
-            ImGui::SliderFloat2("X, Y", vec, -m_sliderLimit, m_sliderLimit);
-
-            vLen = std::sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
-            
-            DrawCanvas();
-          
-            ImVec2 vecEnd = ImVec2{m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10};
-            DrawVector(m_canvasCenter, vecEnd, ImColor(255, 255, 255));
+        case 0:
+            BasicVector();
             break;
-        }
-        case 1:{
-            ImGui::SeparatorText("Example");
-
-            static bool vAdd = true;
-            ImGui::Checkbox("Addition", &vAdd);
-
-            ImGui::Text("Vector + Vector formel: "); ImGui::SameLine();
-            if(vAdd)
-                HelpMark("a(5, 2) + b(1,7) = c(5 + 1, 2 + 7) = c(6, 9)");
-            else
-                HelpMark("a(5, 2) - b(1,7) = c(5 - 1, 2 - 7) = c(4, 5)");
-
-            ImGui::SeparatorText("Practical example");
-
-            if(vAdd){
-                ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a(%.3f, %.3f) +", vec[0], vec[1]); ImGui::SameLine();
-                ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b(%.3f, %.3f) =", vec2[0], vec2[1]); ImGui::SameLine();
-                ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c(%.3f, %.3f)", vec[0] + vec2[0], vec[1] + vec2[1]);
-            }
-            else{
-                ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a(%.3f, %.3f) -", vec[0], vec[1]); ImGui::SameLine();
-                ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b(%.3f, %.3f) =", vec2[0], vec2[1]); ImGui::SameLine();
-                ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c(%.3f, %.3f)", vec[0] - vec2[0], vec[1] - vec2[1]);
-            }
-
-
-            ImGui::Spacing();
-            ImGui::SeparatorText("Interactives");
-
-            ImGui::SliderFloat2("a(X, Y)", vec, -m_sliderLimit, m_sliderLimit);
-            ImGui::SliderFloat2("b(X, Y)", vec2, -m_sliderLimit, m_sliderLimit);
-
-            DrawCanvas();
-
-            ImVec2 v1End = ImVec2(m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10);
-
-            if(vAdd){
-                ImVec2 v2End = ImVec2(v1End.x + vec2[0] * 10, v1End.y + vec2[1] * -10); 
-                DrawVector(m_canvasCenter, v1End, ImColor{0, 255, 0});
-                DrawVector(v1End, v2End, ImColor(0, 0, 255));
-                DrawVector(m_canvasCenter, v2End, ImColor(255, 0, 0));
-            }
-            else{
-                ImVec2 v2End = ImVec2(m_canvasCenter.x + vec2[0] * 10, m_canvasCenter.y + vec2[1] * -10);
-                DrawVector(m_canvasCenter, v1End, ImColor(0, 255, 0));
-                DrawVector(m_canvasCenter, v2End, ImColor(0, 0, 255));
-                DrawVector(v1End, v2End, ImColor(255, 0, 0));
-            }
-        }
+        case 1:
+            BasicVecMath();
+            break;
         }
 
         ImGui::End();
     }
 
     // PRIVATE FUNCTIONS
+
+    void Vectors::BasicVector(){
+        static float vLen;
+
+        ImGui::Text("Vector a = (%.3f, %.3f)", vec[0], vec[1]);
+        ImGui::Text("|a| = √(ax^2 + ay^2) = %.3f", vLen);
+
+        ImGui::Spacing();
+        ImGui::SeparatorText("Interactives");
+        ImGui::SliderFloat2("X, Y", vec, -m_sliderLimit, m_sliderLimit);
+
+        vLen = std::sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
+            
+        DrawCanvas();
+          
+        ImVec2 vecEnd = ImVec2{m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10};
+        DrawVector(m_canvasCenter, vecEnd, ImColor(255, 255, 255));
+    }
+
+    void Vectors::BasicVecMath(){
+        ImGui::SeparatorText("Example");
+
+        static bool vAdd = true;
+        ImGui::Checkbox("Addition", &vAdd);
+
+        ImGui::Text("Vector + Vector formel: "); ImGui::SameLine();
+        if(vAdd)
+            HelpMark("a(5, 2) + b(1,7) = c(5 + 1, 2 + 7) = c(6, 9)");
+        else
+            HelpMark("a(5, 2) - b(1,7) = c(5 - 1, 2 - 7) = c(4, 5)");
+
+        ImGui::SeparatorText("Practical example");
+
+        if(vAdd){
+            ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a(%.3f, %.3f) +", vec[0], vec[1]); ImGui::SameLine();
+            ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b(%.3f, %.3f) =", vec2[0], vec2[1]); ImGui::SameLine();
+            ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c(%.3f, %.3f)", vec[0] + vec2[0], vec[1] + vec2[1]);
+        }
+        else{
+            ImGui::TextColored(ImColor(0, 255, 0, 255), "Vector a(%.3f, %.3f) -", vec[0], vec[1]); ImGui::SameLine();
+            ImGui::TextColored(ImColor(0, 0, 255, 255), "Vector b(%.3f, %.3f) =", vec2[0], vec2[1]); ImGui::SameLine();
+            ImGui::TextColored(ImColor(255, 0, 0, 255), "Vector c(%.3f, %.3f)", vec[0] - vec2[0], vec[1] - vec2[1]);
+        }
+
+
+        ImGui::Spacing();
+        ImGui::SeparatorText("Interactives");
+
+        ImGui::SliderFloat2("a(X, Y)", vec, -m_sliderLimit, m_sliderLimit);
+        ImGui::SliderFloat2("b(X, Y)", vec2, -m_sliderLimit, m_sliderLimit);
+
+        DrawCanvas();
+
+        ImVec2 v1End = ImVec2(m_canvasCenter.x + vec[0] * 10, m_canvasCenter.y + vec[1] * -10);
+
+        if(vAdd){
+            ImVec2 v2End = ImVec2(v1End.x + vec2[0] * 10, v1End.y + vec2[1] * -10); 
+            DrawVector(m_canvasCenter, v1End, ImColor{0, 255, 0});
+            DrawVector(v1End, v2End, ImColor(0, 0, 255));
+            DrawVector(m_canvasCenter, v2End, ImColor(255, 0, 0));
+        }
+        else{
+            ImVec2 v2End = ImVec2(m_canvasCenter.x + vec2[0] * 10, m_canvasCenter.y + vec2[1] * -10);
+            DrawVector(m_canvasCenter, v1End, ImColor(0, 255, 0));
+            DrawVector(m_canvasCenter, v2End, ImColor(0, 0, 255));
+            DrawVector(v1End, v2End, ImColor(255, 0, 0));
+        }
+    }
+
+    // PRIVATE HELPER FUNCTIONS
 
     void Vectors::DrawVector(const ImVec2& v_a, const ImVec2& v_b, const ImColor& color){
         const float arrowHead = 10.0f;
