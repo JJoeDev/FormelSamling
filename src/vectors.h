@@ -19,10 +19,11 @@ namespace visual{
         float vec2[2];
 
 
-        static void HelpMark(const char* msg);
+        static void HelpMark(const char* msg, bool hover = true);
 
         void BasicVector();
         void BasicVecMath();
+        void PolarVectors();
 
         void DrawVector(const ImVec2& v_a, const ImVec2& v_b, const ImColor& color);
         void DrawCanvas();

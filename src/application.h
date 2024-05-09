@@ -36,6 +36,7 @@ private:
     GLFWwindow* m_window;
     int m_displayW, m_displayH;
     bool m_resizable = false;
+    bool m_fontLoaded = false;
 
     ImGuiIO* io;
 

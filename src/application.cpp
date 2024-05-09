@@ -82,13 +82,11 @@ bool App::Init(const char* title){
         ImVector<ImWchar> ranges;
         ImFontGlyphRangesBuilder builder;
         builder.AddRanges(io->Fonts->GetGlyphRangesDefault());
-        builder.AddText(u8"∀αβγδεζηθικλμνξοπρστυφχψωΓΔΘΛΞΟΠΣΦΨΩ∑∏∫√±×÷=≠<>≈≡∝∞∉∈∪∩⊆⊂∧∨¬⇒⇔⊢∠°′″+-×÷^∛≈≅≡=≠<>≤≥|!%∴∵∎πei→←↑↓↔↕⇆⇈⇊⇒⇔");
+        builder.AddText(u8"∀αβγδεζηθικλμνξοπρστυφχψωΓΔΘΛΞΟΠΣΦΨΩ∑∏∫√±×÷=≠≈≡∝∞∉∈∪∩⊆⊂∧∨¬⇒⇔⊢∠°′″+-×÷^∛≈≅≡=≠<>≤≥|!%∴∵∎πei→←↑↓↔↕⇆⇈⇊⇒⇔");
         builder.BuildRanges(&ranges);
         io->Fonts->AddFontFromFileTTF("fonts/NotoSansMath-Regular.ttf", 21.0f, NULL, ranges.Data);
         io->Fonts->Build();
-    }
-    else {
-        std::cout << "Not found NotoSansMath-Regular.ttf\n";
+        m_fontLoaded = true;
     }
 
     return true;
@@ -119,7 +117,8 @@ void App::Gui(){
     // Begin the main window where all gui will be
     ImGui::Begin("Base Window", nullptr, m_guiFlags);
 
-    ImGui::Text("Current font: %s", io->Fonts[0].ConfigData.Data->Name);
+    m_fontLoaded ? ImGui::Text("Current font: %s", io->Fonts[0].ConfigData.Data->Name) : ImGui::TextColored(ImColor(255, 187, 2), "[WARNING] NotoSansMath font could not be loaded");
+
     ImGui::Text("∀ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω Γ Δ Θ Λ Ξ Ο Π Σ Φ Ψ Ω ∑ ∏ ∫ √ ± × ÷ = ≠ < > ≈ ≡ ∝ ∞ ∉ ∈ ∪ ∩ ⊆ ⊂ ∧ ∨ ¬ ⇒ ⇔ ⊢ ∠ ° ′ ″ + - × ÷ ^ ∛ ≈ ≅ ≡ = ≠ < > ≤ ≥ | ! % ∴ ∵ ∎ π e i");
     ImGui::SameLine();
     ImGui::Text(" → ← ↑ ↓ ↔ ↕ ⇆ ⇈ ⇊ ⇒ ⇔");

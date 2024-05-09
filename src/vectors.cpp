@@ -6,7 +6,7 @@ namespace visual{
     void Vectors::Draw() {
         ImGui::Begin("Hello Vectors", nullptr, ImGuiWindowFlags_NoCollapse);
 
-        const char* vecMath[] = {"Vector Basics", "Vector + Vector"};
+        const char* vecMath[] = {"Vector Basics", "Vector + Vector", "Polar form"};
         static int vecMathIdx = 0;
         const char* vecPreviewVal = vecMath[vecMathIdx];
 
@@ -30,6 +30,9 @@ namespace visual{
             break;
         case 1:
             BasicVecMath();
+            break;
+        case 2:
+            PolarVectors();
             break;
         }
 
@@ -106,6 +109,24 @@ namespace visual{
         }
     }
 
+    void Vectors::PolarVectors(){
+        ImGui::Text("Polar vectors formel"); ImGui::SameLine();
+        HelpMark("Vec a = (magnitude; angle)\n∠ = arctan(ax; ay)\nmagnitude = √(ax^2; ay^2)\nExample\nθ = arctan(5; 3) ≈ 59.04 deg\n|a| = √(3^2 + 5^2) = √(34)\na = (√34 ∠59.04)", false);
+
+        static float angle = (std::atan2(10, 6));
+
+        vec[0] = std::cos(angle);
+        vec[1] = std::sin(angle);
+
+        ImGui::Text("Vector Angle: %.3f", angle * (180 / M_PI));
+
+        ImGui::SliderAngle("Angle v", &angle);
+
+        DrawCanvas();
+
+        DrawVector(m_canvasCenter, ImVec2{m_canvasCenter.x + vec[0] * 100, m_canvasCenter.y + vec[1] * -100}, ImColor(255, 0, 0));
+    }
+
     // PRIVATE HELPER FUNCTIONS
 
     void Vectors::DrawVector(const ImVec2& v_a, const ImVec2& v_b, const ImColor& color){
@@ -157,12 +178,20 @@ namespace visual{
         m_drawList->AddLine(ImVec2{m_canvasCenter.x, m_canvasPos.y}, ImVec2{m_canvasCenter.x, m_canvasPos.y + m_canvasSize.y}, canvasGray);
     }
 
-    void Vectors::HelpMark(const char* msg){
-        //ImGui::TextDisabled("(?)");
-        ImGui::TextColored(ImColor(255, 229, 0), "(?)");
-        if(ImGui::BeginItemTooltip()){
-            ImGui::TextUnformatted(msg);
-            ImGui::EndTooltip();
+    void Vectors::HelpMark(const char* msg, bool hover){
+        if(hover){
+            ImGui::TextColored(ImColor(255, 229, 0), "(?)");
+            if(ImGui::BeginItemTooltip()){
+                ImGui::TextUnformatted(msg);
+                ImGui::EndTooltip();
+            }
+        }
+        else{
+            static bool isOpen = false;
+            ImGui::Checkbox("(?)", &isOpen);
+            if(isOpen){
+                ImGui::SetTooltip("%s", msg);
+            }
         }
     }
 }
